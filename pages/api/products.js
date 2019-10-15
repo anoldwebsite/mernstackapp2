@@ -2,7 +2,13 @@
 import Product from "../../models/Product";
 import connectDb from "../../utils/connectDb";
 
-connectDb();
+try {
+    connectDb();
+} catch (error) {
+    console.log(error);
+    res.status(403).send("**********api/products.js showing this error: Problem in connecting to the MongoDB**********");
+}
+
 
 export default async (req, res) => {
     const {page, size} = req.query//page and size are strings at this point
@@ -34,6 +40,7 @@ export default async (req, res) => {
  
    res.status(200).json({ products, totalPages });//We are sending an object
     } catch (error) {
-        
+        console.error(error);
+        res.status(403).send("api/products.js showing this error: Could not find the number of total documents in the collection! Pagination of products might not be possible!");
     }
 };
